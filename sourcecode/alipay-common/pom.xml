@@ -1,0 +1,63 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>alipay-parent</artifactId>
+        <groupId>com.alipay.sdk</groupId>
+        <version>1.1-SNAPSHOT</version>
+        <relativePath>../alipay-parent</relativePath>
+    </parent>
+
+    <artifactId>alipay-common</artifactId>
+    <packaging>jar</packaging>
+
+    <name>alipay-common.jar</name>
+    <description>the framework common jar</description>
+
+    <dependencies>
+        <!--加解密相关-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <!---->
+        <!--apache httpclient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <!---->
+        <!--xml解析-->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <classifier>jdk15</classifier>
+        </dependency>
+        <dependency>
+            <groupId>xom</groupId>
+            <artifactId>xom</artifactId>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
+        <!---->
+    </dependencies>
+</project>

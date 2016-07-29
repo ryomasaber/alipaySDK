@@ -38,14 +38,6 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>alipaySDK</id>
-            <!--<url>file:/home/hengyunabc/code/maven-repo/repository/</url>-->
-            <url>https://github.com/ryomasaber/alipaySDK/master</url>
-        </repository>
-    </distributionManagement>
-
     <dependencyManagement>
         <dependencies>
             <!--各模块依赖-->

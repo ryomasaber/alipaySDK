@@ -1,11 +1,10 @@
 package api.com.jy.alipay.service;
 
 import api.com.jy.alipay.model.BuildResponse;
-import api.com.jy.alipay.model.ResultJSON;
+import api.com.jy.alipay.util.AlipaySubmit;
 import api.com.jy.alipay.util.UtilDate;
 import api.com.jy.request.WapPayRequest;
 import api.com.jy.request.WebPayRequest;
-import api.com.jy.alipay.util.AlipaySubmit;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -111,7 +110,7 @@ public class AlipaySDKService {
      * @param webReturnUrl  同步通知地址
      * @return  支付宝表单请求
      */
-    public BuildResponse webPay(String partner,String key,Double totalFee,String orderName,String body,String webNotifyUrl,String webReturnUrl){
+    public static BuildResponse webPay(String partner,String key,Double totalFee,String orderName,String body,String webNotifyUrl,String webReturnUrl){
 
         return _webPay(partner, key, totalFee, orderName,body, webNotifyUrl, webReturnUrl);
     }
@@ -122,7 +121,7 @@ public class AlipaySDKService {
      * @param key             秘钥
      * @return
      */
-    public String webPay(WebPayRequest webPayRequest,String key){
+    public static String webPay(WebPayRequest webPayRequest,String key){
 
         return AlipaySubmit.buildWebPayRequest(webPayRequest, key);
     }
@@ -197,9 +196,9 @@ public class AlipaySDKService {
      *  wap手机支付接口
      * @param wapPayRequest     全部参数
      * @param key               秘钥
-     * @return
+     * @return url
      */
-    public String wapPay(WapPayRequest wapPayRequest,String key){
+    public static String wapPay(WapPayRequest wapPayRequest,String key){
 
         return AlipaySubmit.buildWapPayRequest(wapPayRequest,key);
     }
@@ -216,7 +215,7 @@ public class AlipaySDKService {
      * @param webReturnUrl  同步通知地址
      * @return
      */
-    private BuildResponse _webPay(String partner,String key,Double totalFee,String orderName,String body,String webNotifyUrl,String webReturnUrl){
+    private static BuildResponse _webPay(String partner,String key,Double totalFee,String orderName,String body,String webNotifyUrl,String webReturnUrl){
         BuildResponse response = new BuildResponse();
         // 商户订单号.
         String outTradeNo = UtilDate.getOrderNum();

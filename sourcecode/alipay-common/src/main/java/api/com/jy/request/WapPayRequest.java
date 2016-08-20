@@ -78,6 +78,11 @@ public class WapPayRequest extends AlipayRquest{
      * 商品类型 1表示实物类商品 0表示虚拟类商品 如果不传，默认为实物类商品。
      */
     private String goods_type;
+    /**
+     * 是否使用支付宝客户端支付 app_pay=Y：尝试唤起支付宝客户端进行支付，若用户未安装支付宝，则继续使用wap收银台进行支付。商户若为APP，则需在APP的webview中增加alipays协议处理逻辑。
+     */
+    private String app_pay = "Y";
+
 
 
     public String getShow_url() {
@@ -166,5 +171,31 @@ public class WapPayRequest extends AlipayRquest{
 
     public void setGoods_type(String goods_type) {
         this.goods_type = goods_type;
+    }
+
+    public String getApp_pay() {
+        return app_pay;
+    }
+
+    public void setApp_pay(String app_pay) {
+        this.app_pay = app_pay;
+    }
+
+    @Override
+    public String toString() {
+        return "WapPayRequest{" +
+                "show_url='" + show_url + '\'' +
+                ", it_b_pay='" + it_b_pay + '\'' +
+                ", extern_token='" + extern_token + '\'' +
+                ", otherfee='" + otherfee + '\'' +
+                ", airticket='" + airticket + '\'' +
+                ", rn_check='" + rn_check + '\'' +
+                ", buyer_cert_no='" + buyer_cert_no + '\'' +
+                ", buyer_real_name='" + buyer_real_name + '\'' +
+                ", scene='" + scene + '\'' +
+                ", hb_fq_param='" + hb_fq_param + '\'' +
+                ", goods_type='" + goods_type + '\'' +
+                ", app_pay='" + app_pay + '\'' +
+                "} " + super.toString();
     }
 }

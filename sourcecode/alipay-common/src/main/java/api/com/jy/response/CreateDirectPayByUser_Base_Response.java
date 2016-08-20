@@ -80,6 +80,10 @@ public class CreateDirectPayByUser_Base_Response {
      *  公用回传参数  用于商户回传参数，该值不能包含“=”、“&”等特殊字符。如果用户请求时传递了该参数，则返回给商户时会回传该参数。
      */
     private String extraCommonParam;
+    /**
+     * 支付渠道组合信息  该笔交易所使用的支付渠道
+     */
+    private String outChannelType;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -221,6 +225,14 @@ public class CreateDirectPayByUser_Base_Response {
         this.extraCommonParam = extraCommonParam;
     }
 
+    public String getOutChannelType() {
+        return outChannelType;
+    }
+
+    public void setOutChannelType(String outChannelType) {
+        this.outChannelType = outChannelType;
+    }
+
     @Override
     public String toString() {
         return "CreateDirectPayByUser_Base_Response{" +
@@ -241,6 +253,7 @@ public class CreateDirectPayByUser_Base_Response {
                 ", totalFee='" + totalFee + '\'' +
                 ", body='" + body + '\'' +
                 ", extraCommonParam='" + extraCommonParam + '\'' +
+                ", outChannelType='" + outChannelType + '\'' +
                 '}';
     }
 }

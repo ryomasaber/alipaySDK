@@ -87,7 +87,7 @@ public class NotifySDKService {
      * @param royaltyNum        分润金额
      * @return
      */
-    public ResultJSON webNotifyUrl(HttpServletRequest request,String partner,String key,String alipayAccount,Double royaltyNum){
+    public static ResultJSON webNotifyUrl(HttpServletRequest request,String partner,String key,String alipayAccount,Double royaltyNum){
 
         ResultJSON json = new ResultJSON();
 
@@ -144,7 +144,7 @@ public class NotifySDKService {
      * @param request
      * @return
      */
-    public ResultJSON wapNotifyUrl(HttpServletRequest request,String partner,String key){
+    public static ResultJSON wapNotifyUrl(HttpServletRequest request,String partner,String key){
 
         ResultJSON json = new ResultJSON();
 
@@ -199,7 +199,7 @@ public class NotifySDKService {
      * @param royaltyNum        分润金额
      * @return
      */
-    public ResultJSON wapNotifyUrl(HttpServletRequest request,String partner,String key,String alipayAccount,Double royaltyNum){
+    public static ResultJSON wapNotifyUrl(HttpServletRequest request,String partner,String key,String alipayAccount,Double royaltyNum){
 
         ResultJSON json = new ResultJSON();
 
@@ -254,7 +254,7 @@ public class NotifySDKService {
      * @param partner       合作身份者ID，以2088开头由16位纯数字组成的字符串
      * @param key           商户的私钥
      */
-    public ResultJSON webReturnUrl(HttpServletRequest request,String partner,String key){
+    public static ResultJSON webReturnUrl(HttpServletRequest request,String partner,String key){
 
         ResultJSON json = new ResultJSON();
         //获取支付宝GET过来的信息
@@ -305,7 +305,7 @@ public class NotifySDKService {
      * @param partner       合作身份者ID，以2088开头由16位纯数字组成的字符串
      * @param key           商户的私钥
      */
-    public ResultJSON wapReturnUrl(HttpServletRequest request,String partner,String key){
+    public static ResultJSON wapReturnUrl(HttpServletRequest request,String partner,String key){
 
         ResultJSON json = new ResultJSON();
 

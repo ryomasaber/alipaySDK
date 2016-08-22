@@ -6,6 +6,7 @@ import api.com.jy.alipay.service.AlipaySDKService;
 import api.com.jy.alipay.service.NotifySDKService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,17 @@ public class PayController {
 
     @Autowired
     private NotifySDKService notifyService;
+
+    /**
+     *  合作身份者ID，以2088开头由16位纯数字组成的字符串
+     */
+    @Value("${partner}")
+    private String partner;
+    /**
+     *  商户的私钥
+     */
+    @Value("${key}")
+    private String key;
 
     /**
      * web即时到账
@@ -69,6 +81,7 @@ public class PayController {
         String orderName="wapPay测试订单";
         //构建支付请求
         BuildResponse buildResponse = alipayService.wapPay(total_fee, orderName ,null);
+        logger.debug("buildResponse:"+buildResponse.getBuildStr());
         try {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
@@ -87,7 +100,7 @@ public class PayController {
     @RequestMapping(value="/web_return_url.do",method = RequestMethod.GET)
     public String web_return_url(HttpServletRequest request){
 
-        ResultJSON json = notifyService.webReturnUrl(request);
+        ResultJSON json = notifyService.webReturnUrl(request,partner,key);
         logger.debug("web同步通知："+json.toString());
         if(json.isSuccess()){
             return "alipay/web_success";
@@ -104,7 +117,7 @@ public class PayController {
     @RequestMapping(value="/wap_return_url.do",method = RequestMethod.GET)
     public String wap_return_url(HttpServletRequest request){
 
-        ResultJSON json = notifyService.webReturnUrl(request);
+        ResultJSON json = notifyService.webReturnUrl(request,partner,key);
         logger.debug("wap同步通知："+json.toString());
         if(json.isSuccess()){
             return "alipay/web_success";
@@ -123,7 +136,7 @@ public class PayController {
     @RequestMapping(value = "/web_notify_url.do", method = RequestMethod.POST)
     public void web_notify_url(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 
-        ResultJSON json = notifyService.webNotifyUrl(request, "15700113209", 0.01);
+        ResultJSON json = notifyService.webNotifyUrl(request, partner,key ,"15700113209", 0.01);
         logger.debug("异步通知："+json.toString());
 
         String result = "fail";
@@ -144,7 +157,7 @@ public class PayController {
     @RequestMapping(value = "/wap_notify_url.do", method = RequestMethod.POST)
     public void wap_notify_url(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 
-        ResultJSON json = notifyService.wapNotifyUrl(request, "15700113209", 0.01);
+        ResultJSON json = notifyService.wapNotifyUrl(request, partner,key,"15700113209", 0.01);
         logger.debug("异步通知："+json.toString());
 
         String result = "fail";

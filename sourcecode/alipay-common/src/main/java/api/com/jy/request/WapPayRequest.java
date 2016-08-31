@@ -18,6 +18,11 @@ public class WapPayRequest extends AlipayRquest{
         this.setService("alipay.wap.create.direct.pay.by.user");
     }
 
+    public WapPayRequest(String partner, Double totalFee, String outTradeNo, String subject ,String body,String signType) {
+        super(partner, totalFee, outTradeNo, subject, body, signType);
+        this.setService("alipay.wap.create.direct.pay.by.user");
+    }
+
     /**
      *  商品展示网址 收银台页面上，商品展示的超链接。
      */

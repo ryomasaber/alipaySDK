@@ -1,6 +1,7 @@
 package api.com.jy.alipay.util;
 
 import api.com.jy.alipay.sign.MD5;
+import api.com.jy.alipay.sign.RSA;
 import api.com.jy.alipay.util.httpClient.HttpProtocolHandler;
 import api.com.jy.alipay.util.httpClient.HttpResponse;
 import api.com.jy.alipay.util.httpClient.HttpResultType;
@@ -39,33 +40,53 @@ public class AlipaySubmit {
      */
     private static final String ALIPAY_GATEWAY_NEW = "https://mapi.alipay.com/gateway.do?";
     private static final String input_charset ="utf-8";
+    private static final String sign_type_MD5 = "MD5";
+    private static final String sign_type_RSA = "RSA";
 
     /**
      * 生成签名结果
      * @param sPara 要签名的数组
+     * @param key 私钥（MD5/RSA)
+     * @param signYype  签名方式(MD5/RSA)
      * @return 签名结果字符串
      */
-	public static String buildRequestMysign(Map<String, String> sPara,String key) {
+	public static String buildRequestMysign(Map<String, String> sPara,String key,String signYype) {
     	String prestr = AlipayCore.createLinkString(sPara); //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         String mysign = "";
-        mysign = MD5.sign(prestr, key, input_charset);
+        if(signYype==null || "".equals(signYype) || signYype.equals(sign_type_MD5)){
+            mysign = MD5.sign(prestr, key, input_charset);
+        }else if(signYype.equals(sign_type_RSA)){
+            mysign = RSA.sign(prestr, key, input_charset);
+        }else {
+            mysign=null;
+        }
+
         return mysign;
     }
 
     /**
      * 生成要请求给支付宝的参数数组
      * @param sParaTemp 请求前的参数数组
+     * @param key 私钥（MD5/RSA)
      * @return 要请求的参数数组
      */
     private static Map<String, String> buildRequestPara(Map<String, String> sParaTemp,String key) {
         //除去数组中的空值和签名参数
         Map<String, String> sPara = AlipayCore.paraFilter(sParaTemp);
-        //生成签名结果
-        String mysign = buildRequestMysign(sPara, key);
 
-        //签名结果与签名方式加入请求提交参数组中
-        sPara.put("sign", mysign);
-        sPara.put("sign_type", "MD5");
+        if(sParaTemp.get("sign_type")==null || sParaTemp.get("sign_type").equals("") || sParaTemp.get("sign_type").equals(sign_type_MD5)){
+            //生成签名结果 (MD5 加密)
+            String mysign = buildRequestMysign(sPara, key,sign_type_MD5);
+            //签名结果与签名方式加入请求提交参数组中
+            sPara.put("sign", mysign);
+            sPara.put("sign_type", sign_type_MD5);
+        }else {
+            //生成签名结果 （RSA 加密）
+            String mysign = buildRequestMysign(sPara, key ,sign_type_RSA);
+            //签名结果与签名方式加入请求提交参数组中
+            sPara.put("sign", mysign);
+            sPara.put("sign_type", sign_type_RSA);
+        }
 
         return sPara;
     }
@@ -75,6 +96,7 @@ public class AlipaySubmit {
      * @param sParaTemp 请求参数数组
      * @param strMethod 提交方式。两个值可选：post、get
      * @param strButtonName 确认按钮显示文字
+     * @param key 私钥（MD5/RSA)
      * @return 提交表单HTML文本
      */
     public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName,String key) {
@@ -102,6 +124,12 @@ public class AlipaySubmit {
         return sbHtml.toString();
     }
 
+    /**
+     * 构建请求
+     * @param sParaTemp 请求参数数组
+     * @param key 私钥（MD5/RSA)
+     * @return
+     */
     public static String buildRequest(Map<String, String> sParaTemp,String key) {
         //待请求参数数组
         Map<String, String> sPara = buildRequestPara(sParaTemp,key);
@@ -127,6 +155,7 @@ public class AlipaySubmit {
      * @param strMethod 提交方式。两个值可选：post、get
      * @param strButtonName 确认按钮显示文字
      * @param strParaFileName 文件上传的参数名
+     * @param key 私钥（MD5/RSA)
      * @return 提交表单HTML文本
      */
     public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName, String strParaFileName,String key) {
@@ -137,8 +166,8 @@ public class AlipaySubmit {
         StringBuffer sbHtml = new StringBuffer();
 
         sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\"  enctype=\"multipart/form-data\" action=\"" + ALIPAY_GATEWAY_NEW
-                      + "_input_charset=" + input_charset+ "\" method=\"" + strMethod
-                      + "\">");
+                + "_input_charset=" + input_charset + "\" method=\"" + strMethod
+                + "\">");
 
         for (int i = 0; i < keys.size(); i++) {
             String name = (String) keys.get(i);
@@ -162,7 +191,7 @@ public class AlipaySubmit {
      * @param strParaFileName 文件类型的参数名
      * @param strFilePath 文件路径
      * @param sParaTemp 请求参数数组
-     * @param key 请求参数数组
+     * @param key 私钥（MD5/RSA)
      * @return 支付宝处理结果
      * @throws Exception
      */
@@ -239,8 +268,8 @@ public class AlipaySubmit {
 
     /**
      *  PC即时到账支付
-     * @param params
-     * @param key
+     * @param params 请求体
+     * @param key 私钥（MD5/RSA)
      * @return
      */
     public static String buildWebPayRequest(WebPayRequest params,String key){
@@ -263,6 +292,12 @@ public class AlipaySubmit {
         return null;
     }
 
+    /**
+     * wap手机网站支付
+     * @param params
+     * @param key
+     * @return
+     */
     public static String buildWapPayRequest(WapPayRequest params ,String key){
         try {
             //对象转为map 并将key由驼峰转为下划线
@@ -273,6 +308,41 @@ public class AlipaySubmit {
             //移除map中值为空的元素
             removeNullValue(sParaTemp);
             return buildRequest(sParaTemp, "post", "确认", key);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * 钉钉的wap支付
+     * @param params
+     * @param key
+     * @return
+     */
+    public static String buildDingWapPayRequest(WapPayRequest params ,String key){
+        try {
+            //对象转为map 并将key由驼峰转为下划线
+            Map<String, String> sParaTemp =MapUtils.toMapForFlat(params);;
+            //构建基础参数
+            buildPayRequest(params,sParaTemp);
+            //RSA签名
+            sParaTemp.put("sign_type","RSA");
+
+            //移除map中值为空的元素
+            removeNullValue(sParaTemp);
+
+            //待请求参数数组
+            Map<String, String> sPara = buildRequestPara(sParaTemp, key);
+
+            String sbHtml = AlipayCore.createLinkString(sPara);
+            System.err.println("sbHtml = " + sbHtml.toString());
+            return sbHtml;
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

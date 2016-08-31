@@ -1,6 +1,7 @@
 package api.com.jy.alipay.util;
 
 import api.com.jy.alipay.sign.MD5;
+import api.com.jy.alipay.sign.RSA;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,15 +25,20 @@ import java.util.Map;
 public class AlipayNotify {
 
     private final static String input_charset="utf-8";
+    private static final String sign_type_MD5 = "MD5";
+    private static final String sign_type_RSA = "RSA";
 
     /**
      * 支付宝消息验证地址
      */
     private static final String HTTPS_VERIFY_URL = "https://mapi.alipay.com/gateway.do?service=notify_verify&";
-
+    // 支付宝的公钥,查看地址：https://b.alipay.com/order/pidAndKey.htm
+    public static String alipay_public_key  = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
     /**
      * 验证消息是否是支付宝发出的合法消息
      * @param params 通知返回来的参数数组
+     * @param partner 合作者身份id
+     * @param key     私钥（MD5/RSA）
      * @return 验证结果
      */
     public static boolean verify(Map<String, String> params ,String partner ,String key) {
@@ -47,7 +53,7 @@ public class AlipayNotify {
 		}
 	    String sign = "";
 	    if(params.get("sign") != null) {sign = params.get("sign");}
-	    boolean isSign = getSignVeryfy(params, sign ,key);
+	    boolean isSign = getSignVeryfy(params, sign ,key,alipay_public_key);
 
         //写日志记录（若要调试，请取消下面两行注释）
         //String sWord = "responseTxt=" + responseTxt + "\n isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);
@@ -64,16 +70,22 @@ public class AlipayNotify {
      * 根据反馈回来的信息，生成签名结果
      * @param Params 通知返回来的参数数组
      * @param sign 比对的签名结果
+     * @param key  商户私钥
+     * @param alipay_public_key （可空，加密方式是RSA不可空）
      * @return 生成的签名结果
      */
-	private static boolean getSignVeryfy(Map<String, String> Params, String sign ,String key) {
+	private static boolean getSignVeryfy(Map<String, String> Params, String sign ,String key ,String alipay_public_key) {
     	//过滤空值、sign与sign_type参数
     	Map<String, String> sParaNew = AlipayCore.paraFilter(Params);
         //获取待签名字符串
         String preSignStr = AlipayCore.createLinkString(sParaNew);
         //获得签名验证结果
         boolean isSign = false;
-        isSign = MD5.verify(preSignStr, sign, key, input_charset);
+        if(Params.get("sign_type").equals(sign_type_MD5)){
+            isSign = MD5.verify(preSignStr, sign, key, input_charset);
+        }else if(Params.get("sign_type").equals(sign_type_RSA)){
+            isSign = RSA.verify(preSignStr, sign, alipay_public_key, input_charset);
+        }
         return isSign;
     }
 

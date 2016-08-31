@@ -248,7 +248,44 @@ public class AlipaySDKService {
         request.setReturnUrl(wapReturnUrl);
 
         response.setOutTradeNo(outTradeNo);
-        response.setBuildStr(AlipaySubmit.buildWapPayRequest(request,key));
+        response.setBuildStr(AlipaySubmit.buildWapPayRequest(request, key));
+        return response;
+    }
+
+    /**
+     * 构建钉钉wap支付请求
+     * @param partner
+     * @param key
+     * @param totalFee
+     * @param orderName
+     * @param body
+     * @param wapNotifyUrl
+     * @param wapReturnUrl
+     * @return
+     */
+    public BuildResponse dingWapPayRequest(String partner,String key,Double totalFee,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
+        BuildResponse response = new BuildResponse();
+        // 商户订单号.
+        String outTradeNo = UtilDate.getOrderNum();
+        WapPayRequest request = new WapPayRequest(partner,totalFee,outTradeNo,orderName,body,"RSA");
+        request.setNotifyUrl(wapNotifyUrl);
+        request.setReturnUrl(wapReturnUrl);
+
+        response.setOutTradeNo(outTradeNo);
+        response.setBuildStr(AlipaySubmit.buildDingWapPayRequest(request, key));
+        return response;
+    }
+
+    public BuildResponse wapPayRequest(String partner,String key,Double totalFee,String orderName,String body,String wapNotifyUrl,String wapReturnUrl,String signType){
+        BuildResponse response = new BuildResponse();
+        // 商户订单号.
+        String outTradeNo = UtilDate.getOrderNum();
+        WapPayRequest request = new WapPayRequest(partner,totalFee,outTradeNo,orderName,body,signType);
+        request.setNotifyUrl(wapNotifyUrl);
+        request.setReturnUrl(wapReturnUrl);
+
+        response.setOutTradeNo(outTradeNo);
+        response.setBuildStr(AlipaySubmit.buildWapPayRequest(request, key));
         return response;
     }
 

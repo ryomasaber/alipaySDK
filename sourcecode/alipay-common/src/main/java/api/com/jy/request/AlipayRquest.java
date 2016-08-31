@@ -47,6 +47,10 @@ public abstract class AlipayRquest implements Serializable{
     private String body;           //String(400)
     public String _input_charset="utf-8";
     public String payment_type="1";
+    /**
+     * 加密方式（默认MD5）
+     */
+    public String signType="MD5";
 
     public AlipayRquest(String partner, Double totalFee, String outTradeNo, String subject) {
         this.partner = partner;
@@ -61,6 +65,15 @@ public abstract class AlipayRquest implements Serializable{
         this.outTradeNo = outTradeNo;
         this.subject = subject;
         this.body = body;
+    }
+
+    public AlipayRquest(String partner, Double totalFee, String outTradeNo, String subject ,String body ,String signType) {
+        this.partner = partner;
+        this.totalFee = totalFee;
+        this.outTradeNo = outTradeNo;
+        this.subject = subject;
+        this.body = body;
+        this.signType=signType;
     }
 
     public String getService() {
@@ -122,8 +135,14 @@ public abstract class AlipayRquest implements Serializable{
     public String getBody() {
         return body;
     }
-
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getSignType() {
+        return signType;
+    }
+    public void setSignType(String signType) {
+        this.signType = signType;
     }
 }

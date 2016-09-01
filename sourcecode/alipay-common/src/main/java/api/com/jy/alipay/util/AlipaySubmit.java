@@ -3,12 +3,13 @@ package api.com.jy.alipay.util;
 import api.com.jy.alipay.sign.MD5;
 import api.com.jy.alipay.sign.RSA;
 import api.com.jy.alipay.util.httpClient.HttpProtocolHandler;
+import api.com.jy.alipay.util.httpClient.HttpRequest;
 import api.com.jy.alipay.util.httpClient.HttpResponse;
 import api.com.jy.alipay.util.httpClient.HttpResultType;
 import api.com.jy.request.AlipayRquest;
+import api.com.jy.request.AppPayRequest;
 import api.com.jy.request.WapPayRequest;
 import api.com.jy.request.WebPayRequest;
-import api.com.jy.alipay.util.httpClient.HttpRequest;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
@@ -325,14 +326,12 @@ public class AlipaySubmit {
      * @param key
      * @return
      */
-    public static String buildDingWapPayRequest(WapPayRequest params ,String key){
+    public static String buildAppPayRequest(AppPayRequest params ,String key){
         try {
             //对象转为map 并将key由驼峰转为下划线
             Map<String, String> sParaTemp =MapUtils.toMapForFlat(params);;
             //构建基础参数
-            buildPayRequest(params,sParaTemp);
-            //RSA签名
-            sParaTemp.put("sign_type","RSA");
+            buildPayRequest(params, sParaTemp);
 
             //移除map中值为空的元素
             removeNullValue(sParaTemp);
@@ -340,9 +339,7 @@ public class AlipaySubmit {
             //待请求参数数组
             Map<String, String> sPara = buildRequestPara(sParaTemp, key);
 
-            String sbHtml = AlipayCore.createLinkString(sPara);
-            System.err.println("sbHtml = " + sbHtml.toString());
-            return sbHtml;
+            return AlipayCore.createLinkString(sPara);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

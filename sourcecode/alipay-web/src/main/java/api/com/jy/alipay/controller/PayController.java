@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +44,30 @@ public class PayController {
     @Value("${key}")
     private String key;
 
+    @Value("${private_key}")
+    private String privateKey;
+
+    /**
+     *  PC即时到账异步通知地址
+     */
+    @Value("${web_notify_url}")
+    private String webNotifyUrl;
+    /**
+     *  wap手机网站异步通知地址
+     */
+    @Value("${wap_notify_url}")
+    private String wapNotifyUrl;
+    /**
+     *  PC即时到账同步通知
+     */
+    @Value("${webReturn_url}")
+    private String webReturnUrl;
+    /**
+     *  wap手机网站同步通知
+     */
+    @Value("${wapReturn_url}")
+    private String wapReturnUrl;
+
     /**
      * web即时到账
      *
@@ -56,7 +81,7 @@ public class PayController {
 
         String orderName="webPay测试订单";
         //构建支付请求
-        BuildResponse buildResponse = alipayService.webPay(total_fee, orderName ,null);
+        BuildResponse buildResponse = alipayService.webPay(total_fee, orderName, null);
         try {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
@@ -80,8 +105,34 @@ public class PayController {
 
         String orderName="wapPay测试订单";
         //构建支付请求
-        BuildResponse buildResponse = alipayService.wapPay(total_fee, orderName ,null);
+        BuildResponse buildResponse = alipayService.wapPay(total_fee, orderName, null);
         logger.debug("buildResponse:"+buildResponse.getBuildStr());
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(buildResponse.getBuildStr());
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/appPay.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Object appPay(HttpServletResponse response,Double total_fee){
+        String orderName="钉钉appPay测试订单";
+        String body = "钉钉支付";
+        BuildResponse buildResponse = alipayService.appPay(partner, key, total_fee, orderName, body, wapNotifyUrl, wapReturnUrl);
+        logger.debug("buildResponse:" + buildResponse.getBuildStr());
+        return buildResponse.getBuildStr();
+    }
+
+    @RequestMapping(value = "/rsaWapPay.do",method = RequestMethod.GET)
+    public void rsaWapPay(HttpServletResponse response,Double total_fee){
+        String orderName="钉钉wapPay测试订单";
+        String body = "钉钉支付";
+        BuildResponse buildResponse = alipayService.wapPayRequest(partner, key, total_fee, orderName, body, wapNotifyUrl, wapReturnUrl, "RSA");
+        logger.debug("buildResponse:" + buildResponse.getBuildStr());
         try {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");

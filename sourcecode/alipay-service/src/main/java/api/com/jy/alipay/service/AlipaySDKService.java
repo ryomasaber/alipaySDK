@@ -3,6 +3,7 @@ package api.com.jy.alipay.service;
 import api.com.jy.alipay.model.BuildResponse;
 import api.com.jy.alipay.util.AlipaySubmit;
 import api.com.jy.alipay.util.UtilDate;
+import api.com.jy.request.AppPayRequest;
 import api.com.jy.request.WapPayRequest;
 import api.com.jy.request.WebPayRequest;
 import org.slf4j.Logger;
@@ -112,7 +113,7 @@ public class AlipaySDKService {
      */
     public static BuildResponse webPay(String partner,String key,Double totalFee,String orderName,String body,String webNotifyUrl,String webReturnUrl){
 
-        return _webPay(partner, key, totalFee, orderName,body, webNotifyUrl, webReturnUrl);
+        return _webPay(partner, key, totalFee, orderName, body, webNotifyUrl, webReturnUrl);
     }
 
     /**
@@ -200,7 +201,35 @@ public class AlipaySDKService {
      */
     public static String wapPay(WapPayRequest wapPayRequest,String key){
 
-        return AlipaySubmit.buildWapPayRequest(wapPayRequest,key);
+        return AlipaySubmit.buildWapPayRequest(wapPayRequest, key);
+    }
+
+//---------------------------------------------------------------------------------------------------------------------------------
+    /**
+     *  app移动支付接口       传参
+     * @param partner       合作伙伴id
+     * @param key           秘钥
+     * @param totalFee      付款金额
+     * @param orderName     订单名称
+     * @param body          商品描述
+     * @param wapNotifyUrl  异步通知地址
+     * @param wapReturnUrl  同步通知地址
+     * @return  支付宝表单请求
+     */
+    public static BuildResponse appPay(String partner,String key,Double totalFee,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
+
+        return _appPay( partner,key,totalFee,orderName,body,wapNotifyUrl,wapReturnUrl);
+    }
+
+    /**
+     *  app移动支付接口
+     * @param appPayRequest     全部参数
+     * @param key               秘钥
+     * @return url
+     */
+    public static String appPay(AppPayRequest appPayRequest,String key){
+
+        return AlipaySubmit.buildAppPayRequest(appPayRequest, key);
     }
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -253,26 +282,26 @@ public class AlipaySDKService {
     }
 
     /**
-     * 构建钉钉wap支付请求
-     * @param partner
-     * @param key
-     * @param totalFee
-     * @param orderName
-     * @param body
-     * @param wapNotifyUrl
-     * @param wapReturnUrl
+     * app移动支付 公共部分
+     * @param partner       合作伙伴id
+     * @param key           秘钥
+     * @param totalFee      付款金额
+     * @param orderName     订单名称
+     * @param body          商品描述
+     * @param wapNotifyUrl  异步通知地址
+     * @param wapReturnUrl  同步通知地址
      * @return
      */
-    public BuildResponse dingWapPayRequest(String partner,String key,Double totalFee,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
+    public static BuildResponse _appPay(String partner,String key,Double totalFee,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
         BuildResponse response = new BuildResponse();
         // 商户订单号.
         String outTradeNo = UtilDate.getOrderNum();
-        WapPayRequest request = new WapPayRequest(partner,totalFee,outTradeNo,orderName,body,"RSA");
+        AppPayRequest request = new AppPayRequest(partner,totalFee,outTradeNo,orderName,body);
         request.setNotifyUrl(wapNotifyUrl);
         request.setReturnUrl(wapReturnUrl);
 
         response.setOutTradeNo(outTradeNo);
-        response.setBuildStr(AlipaySubmit.buildDingWapPayRequest(request, key));
+        response.setBuildStr(AlipaySubmit.buildAppPayRequest(request, key));
         return response;
     }
 

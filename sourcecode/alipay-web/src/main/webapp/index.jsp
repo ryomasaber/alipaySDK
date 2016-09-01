@@ -13,7 +13,7 @@
     <h1><font color="red"><a href="/notify/notify_url.do">web异步通知</a></font></h1>
     <h1><font color="red"><a href="/alipay/web_return_url.do">web同步通知</a></font></h1>
     <h1><font color="red"><a href="/alipay/wapPay.do?total_fee=0.01">wap支付</a></font></h1>
-    <h1><font color="red"><a href="/alipay/dingWapPay.do?total_fee=0.01">钉wap支付</a></font></h1>
+    <h1><font color="red"><a href="/alipay/appPay.do?total_fee=0.01">app支付</a></font></h1>
     <h1><font color="red"><a href="/alipay/rsaWapPay.do?total_fee=0.01">RSAwap支付</a></font></h1>
 </div>
 </body>

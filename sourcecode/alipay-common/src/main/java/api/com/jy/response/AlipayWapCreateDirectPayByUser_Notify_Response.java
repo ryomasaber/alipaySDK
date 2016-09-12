@@ -118,6 +118,12 @@ public class AlipayWapCreateDirectPayByUser_Notify_Response implements Serializa
      * 退款时间 格式为yyyy-MM-dd HH:mm:ss
      */
     private String gmtRefund;
+    /**
+     * 支付渠道组合信息  该笔交易所使用的支付渠道
+     */
+    private String outChannelType;
+
+
 
     public String getNotifyTime() {
         return notifyTime;
@@ -325,6 +331,14 @@ public class AlipayWapCreateDirectPayByUser_Notify_Response implements Serializa
 
     public void setGmtRefund(String gmtRefund) {
         this.gmtRefund = gmtRefund;
+    }
+
+    public String getOutChannelType() {
+        return outChannelType;
+    }
+
+    public void setOutChannelType(String outChannelType) {
+        this.outChannelType = outChannelType;
     }
 
     @Override

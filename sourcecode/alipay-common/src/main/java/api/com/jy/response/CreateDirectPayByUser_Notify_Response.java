@@ -55,6 +55,10 @@ public class CreateDirectPayByUser_Notify_Response extends CreateDirectPayByUser
      非扫码支付方式下，目前不会返回该参数。
      */
     private String businessScene;
+    /**
+     * 支付渠道组合信息  该笔交易所使用的支付渠道
+     */
+    private String outChannelType;
 
 
     public String getGmtCreate() {
@@ -145,6 +149,14 @@ public class CreateDirectPayByUser_Notify_Response extends CreateDirectPayByUser
         this.businessScene = businessScene;
     }
 
+    public String getOutChannelType() {
+        return outChannelType;
+    }
+
+    public void setOutChannelType(String outChannelType) {
+        this.outChannelType = outChannelType;
+    }
+
     @Override
     public String toString() {
         return "CreateDirectPayByUser_Notify_Response{" +
@@ -159,6 +171,7 @@ public class CreateDirectPayByUser_Notify_Response extends CreateDirectPayByUser
                 ", isTotalFeeAdjust='" + isTotalFeeAdjust + '\'' +
                 ", useCoupon='" + useCoupon + '\'' +
                 ", businessScene='" + businessScene + '\'' +
+                ", outChannelType='" + outChannelType + '\'' +
                 "} " + super.toString();
     }
 }

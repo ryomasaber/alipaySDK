@@ -122,6 +122,10 @@ public class AlipayWapCreateDirectPayByUser_Notify_Response implements Serializa
      * 支付渠道组合信息  该笔交易所使用的支付渠道
      */
     private String outChannelType;
+    /**
+     * 支付金额组合信息 该笔交易通过使用各支付渠道所支付的金额。 格式为：金额1+金额2... 如果有多个支付渠道，各渠道所支付金额用“|”隔开
+     */
+    private String outChannelAmount;
 
 
 
@@ -341,6 +345,14 @@ public class AlipayWapCreateDirectPayByUser_Notify_Response implements Serializa
         this.outChannelType = outChannelType;
     }
 
+    public String getOutChannelAmount() {
+        return outChannelAmount;
+    }
+
+    public void setOutChannelAmount(String outChannelAmount) {
+        this.outChannelAmount = outChannelAmount;
+    }
+
     @Override
     public String toString() {
         return "AlipayWapCreateDirectPayByUser_Notify_Response{" +
@@ -370,6 +382,8 @@ public class AlipayWapCreateDirectPayByUser_Notify_Response implements Serializa
                 ", useCoupon='" + useCoupon + '\'' +
                 ", refundStatus='" + refundStatus + '\'' +
                 ", gmtRefund='" + gmtRefund + '\'' +
+                ", outChannelType='" + outChannelType + '\'' +
+                ", outChannelAmount='" + outChannelAmount + '\'' +
                 '}';
     }
 }

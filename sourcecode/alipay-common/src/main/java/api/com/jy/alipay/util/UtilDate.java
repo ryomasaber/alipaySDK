@@ -18,8 +18,8 @@ import java.util.Random;
  */
 public class UtilDate {
 
-    /** 年月日时分秒(无下划线) yyyyMMddHHmmssSSS */
-    public static final String dtLong                  = "yyyyMMddHHmmssSSS";
+    /** 年月日时分秒(无下划线) yyyyMMddHHmmssss */
+    public static final String dtLong                  = "yyMMddHHmmssSSS";
 
     /** 完整时间 yyyy-MM-dd HH:mm:ss */
     public static final String simple                  = "yyyy-MM-dd HH:mm:ss";
@@ -31,12 +31,13 @@ public class UtilDate {
     /**
      * 返回系统当前时间(精确到毫秒),作为一个唯一的订单编号
      * @return
-     *      以yyyyMMddHHmmssSSS为格式的当前系统时间
+     *      以yyyyMMddHHmmssss为格式的当前系统时间
      */
 	public  static String getOrderNum(){
-		Date date=new Date();
-		DateFormat df=new SimpleDateFormat(dtLong);
-		return df.format(date);
+//		Date date=new Date();
+//		DateFormat df=new SimpleDateFormat(dtLong);
+//		return df.format(date);
+		return String.valueOf(System.nanoTime());
 	}
 
 	/**
@@ -68,4 +69,11 @@ public class UtilDate {
 		return rad.nextInt(1000)+"";
 	}
 
+
+	public static void main(String[] args) {
+		System.out.println(getOrderNum()+","+getOrderNum().length());
+
+		//System.out.println(System.currentTimeMillis()+","+String.valueOf(System.currentTimeMillis()).length());
+		System.out.println(System.nanoTime()+","+String.valueOf(System.nanoTime()).length());
+	}
 }

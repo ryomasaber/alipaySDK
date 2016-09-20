@@ -18,8 +18,8 @@ import java.util.Random;
  */
 public class UtilDate {
 
-    /** 年月日时分秒(无下划线) yyyyMMddHHmmss */
-    public static final String dtLong                  = "yyyyMMddHHmmss";
+    /** 年月日时分秒(无下划线) yyyyMMddHHmmssSSS */
+    public static final String dtLong                  = "yyyyMMddHHmmssSSS";
 
     /** 完整时间 yyyy-MM-dd HH:mm:ss */
     public static final String simple                  = "yyyy-MM-dd HH:mm:ss";
@@ -31,7 +31,7 @@ public class UtilDate {
     /**
      * 返回系统当前时间(精确到毫秒),作为一个唯一的订单编号
      * @return
-     *      以yyyyMMddHHmmss为格式的当前系统时间
+     *      以yyyyMMddHHmmssSSS为格式的当前系统时间
      */
 	public  static String getOrderNum(){
 		Date date=new Date();

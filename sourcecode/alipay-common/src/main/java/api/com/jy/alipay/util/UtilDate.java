@@ -37,7 +37,7 @@ public class UtilDate {
 //		Date date=new Date();
 //		DateFormat df=new SimpleDateFormat(dtLong);
 //		return df.format(date);
-		return String.valueOf(System.nanoTime());
+		return String.valueOf(System.currentTimeMillis());
 	}
 
 	/**

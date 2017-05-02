@@ -146,7 +146,7 @@ public class AlipaySDKService {
      */
     public BuildResponse wapPay(Double totalFee,String outTradeNo,String orderName,String body){
 
-        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl);
+        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,null);
     }
 
     /**
@@ -164,7 +164,7 @@ public class AlipaySDKService {
      */
     public BuildResponse wapPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body){
 
-        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl);
+        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,null);
     }
 
     /**
@@ -180,7 +180,7 @@ public class AlipaySDKService {
      */
     public BuildResponse wapPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapReturnUrl){
 
-        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl);
+        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,null);
     }
 
     /**
@@ -197,7 +197,25 @@ public class AlipaySDKService {
      */
     public static BuildResponse wapPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
 
-        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl);
+        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,null);
+    }
+
+    /**
+     *  wap手机网站支付接口    传参
+     * @param partner       合作伙伴id
+     * @param key           秘钥
+     * @param totalFee      付款金额
+     * @param outTradeNo    商户订单号
+     * @param orderName     订单名称
+     * @param body          商品描述
+     * @param wapNotifyUrl  异步通知地址
+     * @param wapReturnUrl  同步通知地址
+     * @param agentId       返佣账号
+     * @return  支付宝表单请求
+     */
+    public static BuildResponse wapPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl,String agentId){
+
+        return _wapPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,agentId);
     }
 
     /**
@@ -226,7 +244,25 @@ public class AlipaySDKService {
      */
     public static BuildResponse appPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
 
-        return _appPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl);
+        return _appPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,null);
+    }
+
+    /**
+     *  app移动支付接口       传参
+     * @param partner       合作伙伴id
+     * @param key           秘钥
+     * @param totalFee      付款金额
+     * @param outTradeNo    商户订单号
+     * @param orderName     订单名称
+     * @param body          商品描述
+     * @param wapNotifyUrl  异步通知地址
+     * @param wapReturnUrl  同步通知地址
+     * @param agentId       返佣账号
+     * @return  支付宝表单请求
+     */
+    public static BuildResponse appPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl,String agentId){
+
+        return _appPay( partner,key,totalFee,outTradeNo,orderName,body,wapNotifyUrl,wapReturnUrl,agentId);
     }
 
     /**
@@ -274,13 +310,15 @@ public class AlipaySDKService {
      * @param body          商品描述
      * @param wapNotifyUrl  异步通知地址
      * @param wapReturnUrl  同步通知地址
+     * @param agentId       返佣账号
      * @return
      */
-    private static BuildResponse _wapPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
+    private static BuildResponse _wapPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl,String agentId){
         BuildResponse response = new BuildResponse();
         WapPayRequest request = new WapPayRequest(partner,totalFee,outTradeNo,orderName,body);
         request.setNotifyUrl(wapNotifyUrl);
         request.setReturnUrl(wapReturnUrl);
+        request.setAgent_id(agentId);
 
         response.setOutTradeNo(outTradeNo);
         response.setBuildStr(AlipaySubmit.buildWapPayRequest(request, key));
@@ -299,11 +337,12 @@ public class AlipaySDKService {
      * @param wapReturnUrl  同步通知地址
      * @return
      */
-    public static BuildResponse _appPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl){
+    public static BuildResponse _appPay(String partner,String key,Double totalFee,String outTradeNo,String orderName,String body,String wapNotifyUrl,String wapReturnUrl,String agentId){
         BuildResponse response = new BuildResponse();
         AppPayRequest request = new AppPayRequest(partner,totalFee,outTradeNo,orderName,body);
         request.setNotifyUrl(wapNotifyUrl);
         request.setReturnUrl(wapReturnUrl);
+        request.setAgent_id(agentId);
 
         response.setOutTradeNo(outTradeNo);
         response.setBuildStr(AlipaySubmit.buildAppPayRequest(request, key));

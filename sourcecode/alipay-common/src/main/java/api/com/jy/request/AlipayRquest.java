@@ -52,6 +52,11 @@ public abstract class AlipayRquest implements Serializable{
      */
     public String signType="MD5";
 
+    /**
+     * 返佣账号 Created by Saber on 2017/5/2 18:43
+     */
+    public String agent_id;
+
     public AlipayRquest(String partner, Double totalFee, String outTradeNo, String subject) {
         this.partner = partner;
         this.totalFee = totalFee;
@@ -74,6 +79,16 @@ public abstract class AlipayRquest implements Serializable{
         this.subject = subject;
         this.body = body;
         this.signType=signType;
+    }
+
+    public AlipayRquest(String partner, Double totalFee, String outTradeNo, String subject ,String body ,String signType,String agent_id) {
+        this.partner = partner;
+        this.totalFee = totalFee;
+        this.outTradeNo = outTradeNo;
+        this.subject = subject;
+        this.body = body;
+        this.signType=signType;
+        this.agent_id=agent_id;
     }
 
     public String getService() {
@@ -144,5 +159,12 @@ public abstract class AlipayRquest implements Serializable{
     }
     public void setSignType(String signType) {
         this.signType = signType;
+    }
+
+    public String getAgent_id() {
+        return agent_id;
+    }
+    public void setAgent_id(String agent_id) {
+        this.agent_id = agent_id;
     }
 }

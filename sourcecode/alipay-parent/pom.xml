@@ -3,7 +3,7 @@
     <parent>
         <artifactId>alipaySDK</artifactId>
         <groupId>com.alipay.sdk</groupId>
-        <version>1.1</version>
+        <version>1.2</version>
         <relativePath>../..</relativePath>
     </parent>
 
@@ -332,7 +332,7 @@
             <id>alipay_getway_dev</id>
             <properties>
                 <!--支付宝设置 todo-->
-                <project_alipay_gateway>http://121.41.88.182:9988</project_alipay_gateway>
+                <project_alipay_gateway>http://xxx.xxxx.xxx</project_alipay_gateway>
             </properties>
         </profile>
     </profiles>

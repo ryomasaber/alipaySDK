@@ -4,7 +4,7 @@ import api.com.jy.alipay.model.BuildResponse;
 import api.com.jy.alipay.model.ResultJSON;
 import api.com.jy.alipay.service.AlipaySDKService;
 import api.com.jy.alipay.service.NotifySDKService;
-import api.com.jy.alipay.util.UtilDate;
+import api.com.jy.alipay.util.UUID16;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,9 +81,37 @@ public class PayController {
     public void webPay(HttpServletResponse response,Double total_fee){
 
         String orderName="webPay测试订单";
-        String outTradeNo = UtilDate.getOrderNum();
+        String outTradeNo = UUID16.create().toString();
         //构建支付请求
         BuildResponse buildResponse = alipayService.webPay(total_fee,outTradeNo ,orderName, null);
+        logger.debug("buildResponse:"+buildResponse.getBuildStr());
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(buildResponse.getBuildStr());
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * web即时到账
+     *
+     * @param response
+     * @param total_fee 金额
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/webPayWithAgentId.do", method = RequestMethod.GET)
+    public void webPayWithAgentId(HttpServletResponse response,Double total_fee){
+
+        String orderName="webPay测试订单";
+        String outTradeNo = UUID16.create().toString();
+        String agentId=partner;
+        //构建支付请求
+        BuildResponse buildResponse = alipayService.webPay(partner,key,total_fee,outTradeNo ,orderName, null, wapReturnUrl,wapNotifyUrl,agentId);
+        logger.debug("buildResponse:"+buildResponse.getBuildStr());
         try {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
@@ -106,10 +134,41 @@ public class PayController {
     public void wapPay(HttpServletResponse response,Double total_fee){
 
         String orderName="wapPay测试订单";
-        String outTradeNo = UtilDate.getOrderNum()+"121213";
+        String outTradeNo = UUID16.create().toString();
+        String body="我是body";
         //构建支付请求
-        BuildResponse buildResponse = alipayService.wapPay(total_fee, outTradeNo ,orderName, null);
+        BuildResponse buildResponse = alipayService.wapPay(partner, key, total_fee, outTradeNo, orderName, body, wapReturnUrl,wapNotifyUrl );
         logger.debug("buildResponse:"+buildResponse.getBuildStr());
+        System.err.println("buildResponse"+buildResponse.getBuildStr());
+        try {
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(buildResponse.getBuildStr());
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * wap手机网站
+     *
+     * @param response
+     * @param total_fee 金额
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/wapPayWithAgentId.do", method = RequestMethod.GET)
+    public void wapPayWithAgentId(HttpServletResponse response,Double total_fee){
+
+        String orderName="wapPay测试订单";
+        String outTradeNo = UUID16.create().toString();
+        String body="我是body";
+        String agentId = partner;
+        //构建支付请求
+        BuildResponse buildResponse = alipayService.wapPay(partner, key, total_fee, outTradeNo, orderName, body, wapReturnUrl,wapNotifyUrl,agentId );
+        logger.debug("buildResponse:"+buildResponse.getBuildStr());
+        System.err.println("buildResponse"+buildResponse.getBuildStr());
         try {
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
@@ -124,9 +183,21 @@ public class PayController {
     @ResponseBody
     public Object appPay(HttpServletResponse response,Double total_fee){
         String orderName="钉钉appPay测试订单";
-        String outTradeNo = UtilDate.getOrderNum();
+        String outTradeNo = UUID16.create().toString();
         String body = "钉钉支付";
         BuildResponse buildResponse = alipayService.appPay(partner, key, total_fee,outTradeNo, orderName, body, webNotifyUrl, webReturnUrl);
+        logger.debug("buildResponse:" + buildResponse.getBuildStr());
+        return buildResponse.getBuildStr();
+    }
+
+    @RequestMapping(value = "/appPayWithAgentId.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Object appPayWithAgentId(HttpServletResponse response,Double total_fee){
+        String orderName="钉钉appPay测试订单";
+        String outTradeNo = UUID16.create().toString();
+        String body = "钉钉支付";
+        String agentId=partner;
+        BuildResponse buildResponse = alipayService.appPay(partner, key, total_fee,outTradeNo, orderName, body, webNotifyUrl, webReturnUrl,agentId);
         logger.debug("buildResponse:" + buildResponse.getBuildStr());
         return buildResponse.getBuildStr();
     }
@@ -134,7 +205,7 @@ public class PayController {
     @RequestMapping(value = "/rsaWapPay.do",method = RequestMethod.GET)
     public void rsaWapPay(HttpServletResponse response,Double total_fee){
         String orderName="钉钉wapPay测试订单";
-        String outTradeNo = UtilDate.getOrderNum();
+        String outTradeNo = UUID16.create().toString();
         String body = "钉钉支付";
         BuildResponse buildResponse = alipayService.wapPayRequest(partner, key, total_fee,outTradeNo, orderName, body, wapNotifyUrl, wapReturnUrl, "RSA");
         logger.debug("buildResponse:" + buildResponse.getBuildStr());
@@ -153,7 +224,7 @@ public class PayController {
      * @return
      * @author Saber
      */
-    @RequestMapping(value="/web_return_url.do",method = RequestMethod.GET)
+    @RequestMapping(value="/web_return_url.do")
     public String web_return_url(HttpServletRequest request){
 
         ResultJSON json = notifyService.webReturnUrl(request,partner,key);
@@ -170,7 +241,7 @@ public class PayController {
      * @return
      * @author Saber
      */
-    @RequestMapping(value="/wap_return_url.do",method = RequestMethod.GET)
+    @RequestMapping(value="/wap_return_url.do")
     public String wap_return_url(HttpServletRequest request){
 
         ResultJSON json = notifyService.wapReturnUrl(request,partner,key);
@@ -189,7 +260,7 @@ public class PayController {
      * @author Saber
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(value = "/web_notify_url.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/web_notify_url.do")
     public void web_notify_url(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 
         ResultJSON json = notifyService.webNotifyUrl(request, partner,key ,"15700113209", 0.01);
@@ -210,12 +281,12 @@ public class PayController {
     }
 
     @SuppressWarnings("rawtypes")
-    @RequestMapping(value = "/wap_notify_url.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/wap_notify_url.do")
     public void wap_notify_url(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 
-        ResultJSON json = notifyService.wapNotifyUrl(request, partner,key,"15700113209", 0.01);
+        ResultJSON json = notifyService.wapNotifyUrl(request, partner,key,"15700113209", 9.00);
         logger.debug("异步通知："+json.toString());
-
+        System.err.println("json = " + json.toString());
         String result = "fail";
         if(json.isSuccess()){
             result="SUCCESS";
